@@ -38,6 +38,12 @@ public class ObjectManager : MonoBehaviour
         TextToSpeech.Instance.StartSpeak("Welcome to Coffee Machine Training Tutorial! In this tutorial We will learn about Coffee Machine");
 
         animator = placedObject.GetComponent<Animator>();
+
+        Debug.Log("Animation length = "+animationNames.Length);
+        for (int i = 0; i < animationNames.Length; i++)
+        {
+            Debug.Log("Animation "+i+ " : "+animationNames[i]);            
+        }
     }
 
     public void EnableTrainer(Button btn)
@@ -96,20 +102,26 @@ public class ObjectManager : MonoBehaviour
 
     public void PlayNextAnimation()
     {
-        int nextAnimationIndex = (currentAnimationIndex + 1) % animationNames.Length;
-        PlayAnimation(animationNames[nextAnimationIndex]);
         isReversed = false;
+        if(currentAnimationIndex != animationNames.Length-1){
+            currentAnimationIndex ++;
+            // currentAnimationIndex = (currentAnimationIndex + 1) % animationNames.Length;
+            PlayAnimation(animationNames[currentAnimationIndex]);
+        }
     }
 
     public void PlayPreviousAnimation()
     {
-        int previousAnimationIndex = (currentAnimationIndex - 1 + animationNames.Length) % animationNames.Length;
-        PlayAnimation(animationNames[previousAnimationIndex]);
         isReversed = true;
+        if(currentAnimationIndex != 0){
+            // currentAnimationIndex = (currentAnimationIndex - 1 + animationNames.Length) % animationNames.Length;
+            PlayAnimation(animationNames[currentAnimationIndex]);
+            currentAnimationIndex --;
+        }
     }
 
     private void PlayAnimation(string animationName)
     {
-        animator.Play(isReversed ? animationName + "Reverse" : animationName);
+        animator.Play(isReversed && currentAnimationIndex!=0 ? animationName + "Reverse" : animationName);
     }
 }
